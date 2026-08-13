@@ -1,0 +1,9 @@
+# Manipulation de donnees
+pandas
+numpy
+
+# Machine Learning
+scikit-learn
+
+# Connexion PostgreSQL (pipeline)
+psycopg2-binary
