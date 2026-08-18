@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   categoryBreakdown as fallbackCategoryBreakdown,
   pannesParEquipement as fallbackPannes,
@@ -20,6 +20,82 @@ const GRAPH_DIMENSIONS = {
 const Y_AXIS_TICKS = [0, 2, 4, 6, 8, 10];
 const DEFAULT_HISTORY_ROWS = 8;
 const HOUR_AXIS_TICKS = ['00', '03', '06', '09', '12', '15', '18', '21', '23'];
+
+function PeriodDropdown({ id, value, options, onChange, placeholder = 'Choisir' }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const rootRef = useRef(null);
+  const selectedOption = options.find((option) => option.value === value) ?? null;
+  const menuId = `${id}-menu`;
+
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
+
+    const handlePointerDown = (event) => {
+      if (rootRef.current && !rootRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener('pointerdown', handlePointerDown);
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
+
+  return (
+    <div className="period-dropdown" ref={rootRef}>
+      <button
+        type="button"
+        className={`period-dropdown-trigger${isOpen ? ' is-open' : ''}`}
+        id={id}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        aria-controls={menuId}
+        onClick={() => setIsOpen((open) => !open)}
+      >
+        <span className="period-dropdown-value">{selectedOption?.label ?? placeholder}</span>
+        <span className="period-dropdown-arrow" aria-hidden="true">
+          ▾
+        </span>
+      </button>
+
+      {isOpen && (
+        <div className="period-dropdown-menu" role="listbox" id={menuId} aria-labelledby={id}>
+          {options.map((option) => {
+            const isSelected = option.value === value;
+
+            return (
+              <button
+                key={option.value}
+                type="button"
+                role="option"
+                aria-selected={isSelected}
+                className={`period-dropdown-option${isSelected ? ' is-selected' : ''}`}
+                onClick={() => {
+                  onChange(option.value);
+                  setIsOpen(false);
+                }}
+              >
+                {option.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function formatMonthLabel(period) {
   if (!period) return 'Mois: --';
@@ -491,37 +567,25 @@ function HistoriquePage() {
               <label className="muted" htmlFor="mois-select">
                 Mois
               </label>
-              <select
+              <PeriodDropdown
                 id="mois-select"
-                className="period-select"
                 value={selectedMonth}
-                onChange={(event) => setSelectedMonth(event.target.value)}
-              >
-                <option value="">Choisir</option>
-                {MONTH_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+                options={MONTH_OPTIONS}
+                placeholder="Choisir"
+                onChange={setSelectedMonth}
+              />
             </div>
             <div className="period-filter-group">
               <label className="muted" htmlFor="annee-select">
                 Annee
               </label>
-              <select
+              <PeriodDropdown
                 id="annee-select"
-                className="period-select"
                 value={selectedYear}
-                onChange={(event) => setSelectedYear(event.target.value)}
-              >
-                <option value="">Choisir</option>
-                {YEAR_OPTIONS.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
+                options={YEAR_OPTIONS.map((year) => ({ value: year, label: year }))}
+                placeholder="Choisir"
+                onChange={setSelectedYear}
+              />
             </div>
             <div className="period-filter-group">
               <label className="muted" htmlFor="categorie-select">

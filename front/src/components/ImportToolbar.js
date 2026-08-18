@@ -157,7 +157,7 @@ function ImportToolbar({ onSuccess }) {
           <span className="import-panel-kicker">Import Excel</span>
           <strong>Ajouter un historique</strong>
         </div>
-        <span className="import-panel-format">.xlsx / .xls</span>
+        
       </div>
 
       <div className="import-panel-grid">

@@ -822,6 +822,9 @@ body.sidebar-open .main-content {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
+  position: relative;
+  z-index: 20;
+  overflow: visible;
 }
 
 .muted {
@@ -839,12 +842,16 @@ body.sidebar-open .main-content {
 
 .period-filter {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(148, 163, 184, 0.12);
-  padding: 8px 12px;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(8, 12, 24, 0.72);
+  padding: 10px 12px;
   border-radius: var(--radius-md);
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  border: 1px solid rgba(137, 167, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  position: relative;
+  z-index: 22;
+  overflow: visible;
 }
 
 .historique-toolbar-actions {
@@ -852,25 +859,155 @@ body.sidebar-open .main-content {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 21;
+  overflow: visible;
 }
 
 .period-filter-group {
-  display: flex;
-  align-items: center;
-  flex: 1 1 132px;
-  gap: 8px;
+  display: grid;
+  gap: 6px;
+  flex: 1 1 156px;
   min-width: 0;
+  position: relative;
+  overflow: visible;
 }
 
 .period-select {
   width: 100%;
   min-width: 0;
-  background: transparent;
-  border: none;
+  background: rgba(10, 15, 28, 0.88);
+  border: 1px solid rgba(137, 167, 255, 0.18);
+  border-radius: var(--radius-sm);
   color: var(--text);
   font-family: inherit;
   font-size: 12px;
+  line-height: 1.2;
+  min-height: 40px;
+  padding: 0 12px;
   outline: none;
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+  color-scheme: dark;
+}
+
+.period-select:hover,
+.period-select:focus-visible {
+  border-color: rgba(137, 167, 255, 0.34);
+  background: rgba(13, 20, 37, 0.95);
+}
+
+.period-dropdown {
+  position: relative;
+  min-width: 0;
+  z-index: 23;
+}
+
+.period-dropdown-trigger {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(137, 167, 255, 0.18);
+  background: linear-gradient(180deg, rgba(11, 17, 32, 0.96), rgba(8, 12, 24, 0.94));
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  color-scheme: dark;
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
+}
+
+.period-dropdown-trigger:hover {
+  border-color: rgba(137, 167, 255, 0.34);
+  background: linear-gradient(180deg, rgba(14, 21, 39, 0.98), rgba(8, 12, 24, 0.96));
+}
+
+.period-dropdown-trigger:focus-visible {
+  box-shadow: var(--focus);
+}
+
+.period-dropdown-trigger.is-open {
+  border-color: rgba(182, 242, 216, 0.34);
+  background: linear-gradient(180deg, rgba(14, 20, 35, 0.98), rgba(8, 12, 24, 0.98));
+}
+
+.period-dropdown-value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.period-dropdown-arrow {
+  flex: none;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1;
+}
+
+.period-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  max-height: 280px;
+  overflow: auto;
+  padding: 6px;
+  border-radius: calc(var(--radius-sm) + 2px);
+  border: 1px solid rgba(137, 167, 255, 0.18);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(8, 12, 24, 0.98));
+  box-shadow: var(--shadow-strong);
+}
+
+.period-dropdown-option {
+  width: 100%;
+  min-height: 36px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+
+.period-dropdown-option:hover,
+.period-dropdown-option:focus-visible,
+.period-dropdown-option.is-selected {
+  background: rgba(137, 167, 255, 0.15);
+  color: #f8fbff;
+}
+
+.period-dropdown-menu::-webkit-scrollbar {
+  width: 10px;
+}
+
+.period-dropdown-menu::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.period-dropdown-menu::-webkit-scrollbar-thumb {
+  background: rgba(137, 167, 255, 0.24);
+  border-radius: 999px;
 }
 
 .grid-2 {
