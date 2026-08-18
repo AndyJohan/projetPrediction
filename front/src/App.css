@@ -591,6 +591,16 @@ body.sidebar-open .main-content {
 
 .import-file-label {
   grid-column: 1 / -1;
+  line-height: 12px;
+}
+
+/* Reserve the file-label row so both primary controls share the same baseline. */
+@media (min-width: 1101px) {
+  .import-actions::before {
+    content: '';
+    display: block;
+    height: 12px;
+  }
 }
 
 .import-field select {
@@ -726,6 +736,7 @@ body.sidebar-open .main-content {
 
 .import-submit-button {
   width: 100%;
+  min-height: 54px;
   justify-content: center;
 }
 

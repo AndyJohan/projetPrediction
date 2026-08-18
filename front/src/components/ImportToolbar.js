@@ -246,9 +246,6 @@ function ImportToolbar({ onSuccess }) {
           >
             {isUploading ? 'Import en cours...' : 'Importer'}
           </button>
-          <span className="import-status" aria-live="polite">
-            {uploadStatus}
-          </span>
           {(isUploading || progress > 0) && (
             <div
               className="import-progress"
