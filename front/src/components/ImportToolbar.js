@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { CATEGORY_OPTIONS, DEFAULT_IMPORT_YEAR, YEAR_OPTIONS } from '../constants/importOptions';
 import { uploadHistoriqueFile } from '../services/historiqueApi';
+import PeriodDropdown from './PeriodDropdown';
 
 function formatFileSize(size) {
   if (!size) {
@@ -163,20 +164,18 @@ function ImportToolbar({ onSuccess }) {
       <div className="import-panel-grid">
         <label className="import-field import-category-field" htmlFor="import-category">
           <span>Categorie</span>
-          <select
+          <PeriodDropdown
             id="import-category"
             value={category}
-            onChange={(event) => setCategory(event.target.value)}
+            options={[
+              { value: '', label: 'Choisir' },
+              ...CATEGORY_OPTIONS.map((option) => ({ value: option, label: option })),
+            ]}
+            placeholder="Choisir"
+            onChange={setCategory}
             disabled={isUploading}
-            aria-describedby={categoryHelpId}
-          >
-            <option value="">Choisir</option>
-            {CATEGORY_OPTIONS.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+            describedBy={categoryHelpId}
+          />
           {!category ? (
             <small id="import-category-help">Requis pour classer les pannes.</small>
           ) : null}
@@ -184,18 +183,16 @@ function ImportToolbar({ onSuccess }) {
 
         <label className="import-field import-year-field" htmlFor="import-year">
           <span>Annee</span>
-          <select
+          <PeriodDropdown
             id="import-year"
             value={year}
-            onChange={(event) => setYear(event.target.value)}
+            options={YEAR_OPTIONS.map((option) => {
+              const yearOption = String(option);
+              return { value: yearOption, label: yearOption };
+            })}
+            onChange={setYear}
             disabled={isUploading}
-          >
-            {YEAR_OPTIONS.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+          />
         </label>
 
         <div className="import-file-zone">

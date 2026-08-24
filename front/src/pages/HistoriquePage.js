@@ -552,74 +552,72 @@ function HistoriquePage() {
         </div>
       </header>
 
-      <div className="historique-import-band">
-        <ImportToolbar onSuccess={reload} />
-      </div>
+      <div className="historique-command-bar">
+        <div className="historique-import-band">
+          <ImportToolbar onSuccess={reload} />
+        </div>
 
-      <div className="section-header">
-        <div>
-          <h2>Vue mensuelle</h2>
-          <p className="muted">{formatMonthLabel(summary?.period)}</p>
-        </div>
-        <div className="historique-toolbar-actions">
-          <div className="period-filter">
-            <div className="period-filter-group">
-              <label className="muted" htmlFor="mois-select">
-                Mois
-              </label>
-              <PeriodDropdown
-                id="mois-select"
-                value={selectedMonth}
-                options={MONTH_OPTIONS}
-                placeholder="Choisir"
-                onChange={setSelectedMonth}
-              />
-            </div>
-            <div className="period-filter-group">
-              <label className="muted" htmlFor="annee-select">
-                Annee
-              </label>
-              <PeriodDropdown
-                id="annee-select"
-                value={selectedYear}
-                options={YEAR_OPTIONS.map((year) => ({ value: year, label: year }))}
-                placeholder="Choisir"
-                onChange={setSelectedYear}
-              />
-            </div>
-            <div className="period-filter-group">
-              <label className="muted" htmlFor="categorie-select">
-                Categorie
-              </label>
-              <select
-                id="categorie-select"
-                className="period-select"
-                value={selectedCategory}
-                onChange={(event) => setSelectedCategory(event.target.value)}
-              >
-                {CATEGORY_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+        <div className="historique-filter-band">
+          <div className="historique-filter-heading">
+            <span className="muted">Vue mensuelle</span>
+            <strong>{formatMonthLabel(summary?.period)}</strong>
           </div>
-          <button
-            className="ghost-button"
-            type="button"
-            onClick={handleExportPdf}
-            disabled={loading || !activePeriod || isExportingPdf}
-          >
-            {isExportingPdf ? 'Export PDF...' : 'Exporter PDF'}
-          </button>
-        </div>
-        <div className="pill">
-          {loading
-            ? 'Chargement...'
-            : error
-              ? "Erreur de chargement de l'API"
-              : 'Donnees issues de la base (connecte)'}
+
+          <div className="historique-toolbar-actions">
+            <div className="period-filter">
+              <div className="period-filter-group">
+                <label className="muted" htmlFor="mois-select">
+                  Mois
+                </label>
+                <PeriodDropdown
+                  id="mois-select"
+                  value={selectedMonth}
+                  options={MONTH_OPTIONS}
+                  placeholder="Choisir"
+                  onChange={setSelectedMonth}
+                />
+              </div>
+              <div className="period-filter-group">
+                <label className="muted" htmlFor="annee-select">
+                  Annee
+                </label>
+                <PeriodDropdown
+                  id="annee-select"
+                  value={selectedYear}
+                  options={YEAR_OPTIONS.map((year) => ({ value: year, label: year }))}
+                  placeholder="Choisir"
+                  onChange={setSelectedYear}
+                />
+              </div>
+              <div className="period-filter-group">
+                <label className="muted" htmlFor="categorie-select">
+                  Categorie
+                </label>
+                <PeriodDropdown
+                  id="categorie-select"
+                  value={selectedCategory}
+                  options={CATEGORY_OPTIONS}
+                  onChange={setSelectedCategory}
+                />
+              </div>
+            </div>
+            <button
+              className="ghost-button"
+              type="button"
+              onClick={handleExportPdf}
+              disabled={loading || !activePeriod || isExportingPdf}
+            >
+              {isExportingPdf ? 'Export PDF...' : 'Exporter PDF'}
+            </button>
+          </div>
+
+          <div className="pill">
+            {loading
+              ? 'Chargement...'
+              : error
+                ? "Erreur de chargement de l'API"
+                : 'Donnees issues de la base (connecte)'}
+          </div>
         </div>
       </div>
 

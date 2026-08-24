@@ -81,7 +81,6 @@ function Sidebar() {
           </div>
           <div>
             <p className="brand-title sidebar-brand-title">ASECNA EFP</p>
-            <span className="brand-sub sidebar-brand-sub">Centre de pilotage</span>
           </div>
         </div>
 
@@ -90,7 +89,13 @@ function Sidebar() {
             <p className="sidebar-section-title">{section.title}</p>
             <nav className="sidebar-nav">
               {section.items.map((item) => (
-                <NavLink key={item.to} className={linkClass} to={item.to}>
+                <NavLink
+                  key={item.to}
+                  className={linkClass}
+                  to={item.to}
+                  title={item.label}
+                  aria-label={item.label}
+                >
                   <span className="nav-icon" aria-hidden="true">
                     <img src={item.icon} alt="" />
                   </span>

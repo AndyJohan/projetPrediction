@@ -12,10 +12,10 @@ function CartePage() {
 
       <div className="section-header">
         <div>
-          <h2>Afrique interactive</h2>
-          <p className="muted">Visualisation neon des pays africains et de Madagascar</p>
+          <h2>Madagascar interactive</h2>
+          <p className="muted">Visualisation  des sites ASECNA Madagascar et les iles voisines</p>
         </div>
-        <div className="pill">react-simple-maps</div>
+        
       </div>
 
       <div className="card africa-map-page-card">
