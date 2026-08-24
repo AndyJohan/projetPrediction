@@ -50,7 +50,10 @@ html {
 
 body {
   margin: 0;
-  background: radial-gradient(circle at top left, #18233f 0%, #0b1020 45%, #090c18 100%);
+  background:
+    linear-gradient(115deg, rgba(5, 9, 18, 0.93) 0%, rgba(11, 16, 32, 0.76) 42%, rgba(5, 9, 18, 0.9) 100%),
+    url('./assets/template.jpg') center / cover fixed no-repeat,
+    #0b1020;
   color: var(--text);
   font-family: 'Space Grotesk', 'Spline Sans', system-ui, sans-serif;
   line-height: 1.5;

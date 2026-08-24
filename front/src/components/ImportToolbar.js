@@ -144,7 +144,6 @@ function ImportToolbar({ onSuccess }) {
     ? `${formatFileSize(file.size)} pret a importer`
     : 'Classeur .xlsx ou .xls';
   const selectedFileLabel = file ? file.name : 'Aucun fichier selectionne';
-  const uploadStatus = isUploading ? `Import en cours, ${progress}%` : 'Pret pour import Excel';
 
   const handleSubmit = async (event) => {
     event.preventDefault();
