@@ -45,7 +45,6 @@ function formatDate(value?: string): string {
   if (!value) return '--';
   return new Intl.DateTimeFormat('fr-FR', {
     dateStyle: 'medium',
-    timeStyle: 'short',
   }).format(new Date(value));
 }
 

@@ -7,6 +7,7 @@ const navSections = [
   {
     title: 'Menu',
     items: [
+      { to: '/', label: 'Accueil', icon: '/logo.png', end: true },
       { to: '/historique', label: 'Historique', icon: '/icons/historique.png' },
       { to: '/prediction', label: 'Prediction', icon: '/icons/prediction.png' },
       { to: '/carte', label: 'Carte', icon: '/icons/adresse.png' },
@@ -93,6 +94,7 @@ function Sidebar() {
                   key={item.to}
                   className={linkClass}
                   to={item.to}
+                  end={item.end}
                   title={item.label}
                   aria-label={item.label}
                 >
