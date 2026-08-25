@@ -225,10 +225,7 @@ function getContextStatus(loading, error) {
     };
   }
 
-  return {
-    label: 'Contexte pret',
-    className: 'ready',
-  };
+  return null;
 }
 
 function getConfidenceLevel(score) {
@@ -905,11 +902,6 @@ function AssistantPage() {
           <p className="eyebrow">Assistant IA</p>
           <h1>Assistant intelligent</h1>
         </div>
-        <div className="topbar-actions">
-          <button className="ghost-button" type="button" onClick={handleReset} disabled={isLoading}>
-            Effacer l'historique
-          </button>
-        </div>
       </header>
 
       <div className="section-header">
@@ -978,8 +970,21 @@ function AssistantPage() {
               </select>
             </div>
           </div>
-          <button className="ghost-button" type="button" onClick={handleResetContext} disabled={isLoading}>
+          <button
+            className="ghost-button assistant-filter-action"
+            type="button"
+            onClick={handleResetContext}
+            disabled={isLoading}
+          >
             Reinitialiser le contexte
+          </button>
+          <button
+            className="ghost-button assistant-filter-action"
+            type="button"
+            onClick={handleReset}
+            disabled={isLoading}
+          >
+            Effacer l'historique
           </button>
         </div>
       </div>
@@ -1133,22 +1138,18 @@ function AssistantPage() {
         <aside className="card assistant-side-card">
           <div className="assistant-knowledge-card">
             <div className="assistant-knowledge-header">
-              <span className="assistant-knowledge-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" focusable="false">
-                  <path d="M12 3.75 5.75 6.2v4.72c0 4.1 2.63 7.75 6.25 9.02 3.62-1.27 6.25-4.92 6.25-9.02V6.2L12 3.75Z" />
-                  <path d="M8.75 11.8h6.5M8.75 9.15h6.5M8.75 14.45h3.75" />
-                </svg>
-              </span>
               <div>
                 <h3>Ce que l'assistant sait</h3>
                 <p className="muted">Contexte actuellement transmis au service IA.</p>
               </div>
             </div>
 
-            <div className={`assistant-knowledge-state ${contextStatus.className}`}>
-              <span />
-              {contextStatus.label}
-            </div>
+            {contextStatus ? (
+              <div className={`assistant-knowledge-state ${contextStatus.className}`}>
+                <span />
+                {contextStatus.label}
+              </div>
+            ) : null}
 
             <div className="assistant-knowledge-grid">
               {knowledgeItems.map((item) => (
