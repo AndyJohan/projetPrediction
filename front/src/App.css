@@ -2012,9 +2012,10 @@ body.sidebar-open .main-content {
 .equipment-risk-card-meta {
   display: flex;
   min-width: 0;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 8px;
+  gap: 6px 8px;
+  flex-wrap: wrap;
 }
 
 .equipment-risk-card-title h3 {
@@ -2025,6 +2026,8 @@ body.sidebar-open .main-content {
 }
 
 .equipment-kicker {
+  min-width: 0;
+  flex: 1 1 104px;
   color: rgba(166, 180, 200, 0.72);
   font-size: 11px;
   font-weight: 700;
@@ -2035,22 +2038,29 @@ body.sidebar-open .main-content {
 .risk-status-chip {
   display: inline-flex;
   min-height: 24px;
-  max-width: 100%;
+  max-width: min(100%, 152px);
+  flex: 0 1 auto;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 6px;
   padding: 5px 7px;
   border-radius: var(--radius-sm);
   color: var(--muted);
   font-size: 10px;
   font-weight: 800;
-  line-height: 1;
+  line-height: 1.15;
   text-transform: uppercase;
-  white-space: nowrap;
+  white-space: normal;
   background: rgba(148, 163, 184, 0.08);
 }
 
+.risk-status-chip > span:last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .risk-status-dot {
+  margin-top: 3px;
   width: 6px;
   height: 6px;
   flex: 0 0 6px;
