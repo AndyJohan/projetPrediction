@@ -24,6 +24,8 @@ type FailureEstimate = {
   date_estimee: string;
 };
 
+type CardStatus = 'risk' | 'surveillance' | 'healthy' | 'neutral';
+
 export type RiskPredictionResponse = {
   classe_predite: number;
   statut_predit: 'Sain' | 'Surveillance' | 'Risque' | string;
@@ -53,60 +55,20 @@ function getRiskColor(probability: number): string {
   return 'healthy';
 }
 
-type RiskStatusIconProps = {
-  status: 'Surveillance' | 'Risque';
-  pulse?: boolean;
-  withLabel?: boolean;
-};
+function getCardStatus(
+  status: string,
+  prediction: RiskPredictionResponse | null,
+): CardStatus {
+  if (status === 'Risque') return 'risk';
+  if (status === 'Surveillance' || Boolean(prediction?.triggerAlert)) return 'surveillance';
+  return 'healthy';
+}
 
-export function RiskStatusIcon({
-  status,
-  pulse = false,
-  withLabel = false,
-}: RiskStatusIconProps) {
-  const isRisk = status === 'Risque';
-  const label = isRisk
-    ? PREDICTION_STATUS_LABELS.Risque
-    : PREDICTION_STATUS_LABELS.Surveillance;
-  const statusClass = isRisk ? 'risk' : 'surveillance';
-
-  return (
-    <span
-      aria-label={label}
-      title={label}
-      className={`risk-status-icon ${statusClass}${pulse ? ' is-pulsing' : ''}`}
-    >
-      {isRisk ? (
-        <svg
-          aria-hidden="true"
-          fill="none"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2.2"
-          viewBox="0 0 24 24"
-        >
-          <path d="M12 3 22 20H2L12 3Z" />
-          <path d="M12 9v5" />
-          <path d="M12 17h.01" />
-        </svg>
-      ) : (
-        <svg
-          aria-hidden="true"
-          fill="none"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2.2"
-          viewBox="0 0 24 24"
-        >
-          <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" />
-          <circle cx="12" cy="12" r="3" />
-        </svg>
-      )}
-      {withLabel ? <span>{label}</span> : null}
-    </span>
-  );
+function getStatusLabel(cardStatus: CardStatus): string {
+  if (cardStatus === 'risk') return PREDICTION_STATUS_LABELS.Risque;
+  if (cardStatus === 'surveillance') return PREDICTION_STATUS_LABELS.Surveillance;
+  if (cardStatus === 'neutral') return 'Analyse';
+  return 'Sain';
 }
 
 function EquipmentRiskCard({
@@ -119,34 +81,26 @@ function EquipmentRiskCard({
 }: EquipmentRiskCardProps) {
   const riskProbability = prediction?.probabilite_risque ?? 0;
   const status = prediction?.statut_predit ?? 'Sain';
-  const isRisk = status === 'Risque';
-  const isSurveillance = status === 'Surveillance' || Boolean(prediction?.triggerAlert);
   const progressColor = getRiskColor(riskProbability);
   const estimate = prediction?.estimation_prochaine_panne ?? null;
-  const cardStatus = isRisk ? 'risk' : isSurveillance ? 'surveillance' : 'healthy';
+  const cardStatus: CardStatus = loading ? 'neutral' : getCardStatus(status, prediction);
+  const statusLabel = getStatusLabel(cardStatus);
+  const hasElevatedStatus = cardStatus === 'risk' || cardStatus === 'surveillance';
 
   return (
     <article className={`equipment-risk-card card ${cardStatus}`}>
       <div className="equipment-risk-card-header">
         <div className="equipment-risk-card-title">
-          <p className="equipment-kicker">Equipement #{equipmentId}</p>
+          <div className="equipment-risk-card-meta">
+            <p className="equipment-kicker">Equipement #{equipmentId}</p>
+            <span className={`risk-status-chip ${cardStatus}`} title={statusLabel}>
+              <span className="risk-status-dot" aria-hidden="true" />
+              <span>{statusLabel}</span>
+            </span>
+          </div>
           <h3>{equipmentName ?? `Machine ${equipmentId}`}</h3>
           <p className="muted">Categorie {categorie}</p>
         </div>
-
-        {loading ? (
-          <span className="risk-status-pill neutral">
-            Analyse...
-          </span>
-        ) : isRisk ? (
-          <RiskStatusIcon status="Risque" pulse />
-        ) : isSurveillance ? (
-          <RiskStatusIcon status="Surveillance" />
-        ) : (
-          <span className="risk-status-pill healthy">
-            EQUIPEMENT SAIN
-          </span>
-        )}
       </div>
 
       {error ? (
@@ -186,7 +140,7 @@ function EquipmentRiskCard({
             </div>
           ) : (
             <div className="risk-estimate neutral">
-              {isSurveillance
+              {hasElevatedStatus
                 ? 'Surveillance recommandee, sans fenetre de panne confirmee sous 15 jours.'
                 : 'Aucune panne estimee sous 15 jours.'}
             </div>

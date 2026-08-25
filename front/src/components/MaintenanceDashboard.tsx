@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react';
-import EquipmentRiskCard, { RiskStatusIcon } from './EquipmentRiskCard.tsx';
+import EquipmentRiskCard from './EquipmentRiskCard.tsx';
 import type { RiskPredictionResponse } from './EquipmentRiskCard.tsx';
-import {
-  PREDICTION_STATUS_LABELS,
-  PREDICTION_THRESHOLDS,
-} from '../constants/prediction.ts';
+import { PREDICTION_THRESHOLDS } from '../constants/prediction.ts';
 import { httpClient } from '../services/httpClient';
 
 type EquipmentRisk = {
@@ -18,7 +15,6 @@ type EquipmentRisk = {
 function MaintenanceDashboard() {
   const [equipmentRisks, setEquipmentRisks] = useState<EquipmentRisk[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [refreshing, setRefreshing] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -63,49 +59,8 @@ function MaintenanceDashboard() {
     };
   }, []);
 
-  async function refreshEquipmentRisks() {
-    setRefreshing(true);
-    setError(null);
-
-    try {
-      const response = await httpClient.post<EquipmentRisk[]>(
-        '/maintenance/equipment-risks/refresh',
-        null,
-        {
-          params: {
-            limit: 12,
-          },
-        },
-      );
-
-      setEquipmentRisks(response.data);
-    } catch (requestError) {
-      setError(
-        requestError instanceof Error
-          ? requestError.message
-          : 'Impossible d actualiser les predictions.',
-      );
-    } finally {
-      setRefreshing(false);
-    }
-  }
-
   return (
     <section className="section prediction-dashboard">
-      <div className="prediction-legend card">
-        <span className="prediction-legend-title">Legende</span>
-        <div className="prediction-legend-items">
-          <div className="prediction-legend-item">
-            <RiskStatusIcon status="Surveillance" />
-            <span>{PREDICTION_STATUS_LABELS.Surveillance}</span>
-          </div>
-          <div className="prediction-legend-item">
-            <RiskStatusIcon status="Risque" />
-            <span>{PREDICTION_STATUS_LABELS.Risque}</span>
-          </div>
-        </div>
-      </div>
-
       <header className="topbar prediction-topbar">
         <div>
           <p className="eyebrow">Maintenance predictive</p>
@@ -117,15 +72,6 @@ function MaintenanceDashboard() {
         </div>
 
         <div className="prediction-actions">
-          <button
-            type="button"
-            onClick={refreshEquipmentRisks}
-            disabled={loading || refreshing}
-            className="primary-button prediction-refresh-button"
-          >
-            {refreshing ? 'Actualisation...' : 'Actualiser les predictions'}
-          </button>
-
           <div className="prediction-thresholds">
             Surveillance :{' '}
             <span>{(PREDICTION_THRESHOLDS.surveillance * 100).toFixed(0)}%</span>
