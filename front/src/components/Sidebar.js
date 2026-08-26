@@ -76,14 +76,16 @@ function Sidebar() {
       />
 
       <aside className={`sidebar ${isOpen ? 'open' : 'collapsed'}`}>
-        <div className="sidebar-brand-card">
-          <div className="brand-icon sidebar-brand-icon">
-            <img src="/logo.png" alt="Logo ASECNA" />
+        {isOpen ? (
+          <div className="sidebar-brand-card">
+            <div className="brand-icon sidebar-brand-icon">
+              <img src="/logo.png" alt="Logo ASECNA" />
+            </div>
+            <div>
+              <p className="brand-title sidebar-brand-title">ASECNA EFP</p>
+            </div>
           </div>
-          <div>
-            <p className="brand-title sidebar-brand-title">ASECNA EFP</p>
-          </div>
-        </div>
+        ) : null}
 
         {navSections.map((section) => (
           <div key={section.title} className="sidebar-nav-section">
