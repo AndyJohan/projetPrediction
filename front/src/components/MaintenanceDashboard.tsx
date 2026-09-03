@@ -15,6 +15,7 @@ type EquipmentRisk = {
 function MaintenanceDashboard() {
   const [equipmentRisks, setEquipmentRisks] = useState<EquipmentRisk[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -52,12 +53,39 @@ function MaintenanceDashboard() {
       }
     }
 
-    fetchEquipmentRisks();
+    void fetchEquipmentRisks();
 
     return () => {
       isMounted = false;
     };
   }, []);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    setError(null);
+
+    try {
+      const response = await httpClient.post<EquipmentRisk[]>(
+        '/maintenance/equipment-risks/refresh',
+        null,
+        {
+          params: {
+            limit: 12,
+          },
+        },
+      );
+
+      setEquipmentRisks(response.data);
+    } catch (requestError) {
+      setError(
+        requestError instanceof Error
+          ? requestError.message
+          : 'Impossible de rafraichir les predictions.',
+      );
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   return (
     <section className="section prediction-dashboard">
@@ -78,6 +106,15 @@ function MaintenanceDashboard() {
             <span aria-hidden="true">|</span>
             Risque : <span>{(PREDICTION_THRESHOLDS.risk * 100).toFixed(0)}%</span>
           </div>
+
+          <button
+            type="button"
+            className="ghost-button"
+            onClick={handleRefresh}
+            disabled={loading || refreshing}
+          >
+            {refreshing ? 'Actualisation...' : 'Rafraîchir'}
+          </button>
         </div>
       </header>
 

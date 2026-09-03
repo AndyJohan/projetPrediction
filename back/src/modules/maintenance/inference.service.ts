@@ -33,7 +33,7 @@ export interface RiskPrediction {
 @Injectable()
 export class InferenceService {
   private activeProcesses = 0;
-  private readonly timeoutMs = Number(process.env.ML_INFERENCE_TIMEOUT_MS ?? 15_000);
+  private readonly timeoutMs = Number(process.env.ML_INFERENCE_TIMEOUT_MS ?? 60_000);
   private readonly maxConcurrentProcesses = Number(process.env.ML_MAX_CONCURRENCY ?? 2);
   private readonly maxOutputBytes = Number(process.env.ML_MAX_OUTPUT_BYTES ?? 64_000);
   private readonly requiredNumericFields: Array<keyof MaintenanceDto> = [

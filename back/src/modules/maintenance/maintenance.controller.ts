@@ -56,6 +56,7 @@ export class MaintenanceController {
         nombrePannes: 'DESC',
         nomEquipement: 'ASC',
       },
+      take: maxItems,
     });
 
     const predictions: EquipmentRisk[] = [];
