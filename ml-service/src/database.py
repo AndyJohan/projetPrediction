@@ -1,7 +1,13 @@
 import os
+from pathlib import Path
 
 import pandas as pd
 import psycopg2
+from dotenv import load_dotenv
+
+# Charger les variables d'environnement depuis .env
+env_path = Path(__file__).parent.parent / ".env"
+load_dotenv(env_path)
 
 
 def get_conn_params():
@@ -15,6 +21,7 @@ def get_conn_params():
         "user": os.getenv("DB_USER", "prediction_app"),
         "password": password,
         "port": int(os.getenv("DB_PORT", "5432")),
+        "client_encoding": "utf-8",
     }
 
 

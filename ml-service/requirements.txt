@@ -7,3 +7,6 @@ scikit-learn
 
 # Connexion PostgreSQL (pipeline)
 psycopg2-binary
+
+# Variables d'environnement
+python-dotenv

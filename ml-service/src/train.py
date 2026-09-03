@@ -350,6 +350,11 @@ def entrainer_modele():
     print("\n--- Apercu des statuts predits avec RandomForest ---")
     print(apercu_predictions.head(10))
 
+    results_dir = dossier_parent / "results"
+    results_dir.mkdir(exist_ok=True)
+    apercu_predictions.to_csv(results_dir / "test_prediction.csv", index=False, encoding="utf-8-sig")
+    print(f"\nPredictions de test exportees : {results_dir / 'test_prediction.csv'}")
+
     dossier_modeles = dossier_parent / "models"
     dossier_modeles.mkdir(exist_ok=True)
 
